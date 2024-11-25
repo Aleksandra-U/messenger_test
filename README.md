@@ -34,3 +34,5 @@ The main page displays users with whom there are existing dialogs. All conversat
 A Telegram bot created with Aiogram notifies users of new messages (in the background via Celery) if the user is offline. IMPORTANT! To send notifications about new messages, a check is performed to see if the user is online or offline. A registered user in the database has a default field named "token" with a value of 0 (indicating offline status). When the user logs into the site, this value changes to 1 (indicating online status). The value will only change back to 0 (offline) upon clicking the "Logout" button. In this case, the token will be set to 0, and the bot will begin sending notifications about new messages. The JWT token will expire in the browser after 24 hours, but the token value in the database will not change automatically (only upon logout).
 
 The code for handling requests is fully asynchronous. I did not see the need or opportunity to implement multithreading for improving performance.
+
+Unit-tests are implemented.
