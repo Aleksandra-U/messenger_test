@@ -1,0 +1,186 @@
+<!DOCTYPE html>    
+<html lang="ru">    
+<head>    
+    <meta charset="UTF-8">    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">    
+    <title>Регистрация или авторизация</title>    
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style> 
+        
+        
+        body {   
+            background-color: rgb(212, 128, 163);   
+            color: white;   
+        }   
+        .header {   
+            background-color: #ff77a3; 
+            padding: 10px;   
+            display: flex;   
+            justify-content: space-between;   
+            align-items: center;   
+        }   
+        .header h1 {   
+            margin: 0;   
+        }   
+        .login-btn {   
+            display: flex;   
+            align-items: center;   
+            background-color: #007bff;   
+            color: white;   
+            border: none;   
+            padding: 10px 20px;   
+            cursor: pointer;   
+            text-align: center;   
+            text-decoration: none;   
+        }   
+        .login-btn:hover {   
+            background-color: #0056b3;   
+        }   
+        .arrow-icon {   
+            margin-right: 5px;   
+        }   
+        .centered {    
+            display: flex;    
+            flex-direction: column;    
+            align-items: center;    
+            justify-content: center;    
+            height: 100vh;    
+        }  
+        
+        .form-control { 
+        background-color: #FFEEF8; /* Серый цвет фона для всех полей ввода */ 
+        }
+
+        .form-control::placeholder {   
+            color: grey;   
+            opacity: 0.5;   
+        }  
+        .btn-primary, .btn-success { 
+            background: #FF77A3; 
+            border: none; 
+            color: white; 
+            transition: background 0.5s; 
+        } 
+        .btn-primary:hover, .btn-success:hover { 
+            background: linear-gradient(45deg,  #b44c85, #de0a69); 
+        }
+
+        .btn-secondary { 
+        background: #FF77A3;
+        border: none;  
+        color: white;  
+        transition: background 0.5s;  
+        } 
+        .btn-secondary:hover, .btn-success:hover {
+            background: linear-gradient(45deg,  #b44c85, #de0a69); 
+        }
+    
+
+    </style>  
+</head>    
+<body>    
+    <header class="header">     
+        <h1>Messanger</h1>  
+        <a href="/" id="authButton" style="text-decoration: underline; color: white; cursor: pointer;"><span class="fas fa-arrow-right"></span> Войти</a>   
+    </header>
+  
+    <div class="container centered">    
+        <h2 class="mt-5" id="formTitle">Вход</h2>    
+        {% if error_message %}    
+            <div class="alert alert-danger mt-3">{{ error_message }}</div>    
+        {% endif %}    
+        {% if success_message %}   
+            <div class="alert alert-success mt-3">{{ success_message }}</div>   
+        {% endif %}  
+        <form action="/" method="post" id="loginForm" autocomplete="off"> 
+            <div class="form-group">     
+                <input type="text" class="form-control" id="user_name" name="user_name" placeholder="user_name" required autocomplete="off">     
+            </div>     
+            <div class="form-group">     
+                <input type="password" class="form-control" id="password" name="password" placeholder="пароль" required autocomplete="off">     
+            </div>  
+            <div class="text-center">    
+                <button type="submit" class="btn btn-primary" id="submitButton">Войти</button>     
+            </div>    
+        </form>    
+        <hr>    
+        <h5 id="registerPrompt">Еще не зарегистрированы?</h5>    
+        <button class="btn btn-secondary" id="registerButton" onclick="toggleRegister()">Регистрация</button>    
+  
+        <div id="registerForm" style="display: none;">    
+            <h2 class="mt-5 text-center" id="registerTitle">Регистрация</h2> <!-- Добавленный заголовок -->
+            <form action="/register" method="post" autocomplete="off"> 
+    
+                <div id="countdown" class="mt-3" style="font-size: 20px; color: white; text-align: center;"></div>
+                
+                <div class="form-group"> 
+                    <input type="text" class="form-control" name="user_name" placeholder="user_name" required autocomplete="off"> 
+                </div> 
+                <div class="form-group"> 
+                    <input type="password" class="form-control" name="password" placeholder="пароль" required autocomplete="off"> 
+                </div> 
+                <div class="form-group"> 
+                    <input type="password" class="form-control" name="password_repeat" placeholder="Повторите пароль" required autocomplete="off"> 
+                </div> 
+                
+                <div class="text-center"> 
+                    <button type="submit" class="btn btn-success">Зарегистрироваться</button> 
+                </div> 
+            </form> 
+        </div>
+    </div>   
+  
+    <script> 
+function toggleRegister() {    
+            const registerForm = document.getElementById('registerForm');  
+            const loginForm = document.getElementById('loginForm');  
+            const formTitle = document.getElementById('formTitle');  
+            const registerTitle = document.getElementById('registerTitle'); // Заголовок регистрации  
+            const submitButton = document.getElementById('submitButton');  
+            const authButton = document.getElementById('authButton');  
+            const registerPrompt = document.getElementById('registerPrompt'); 
+            const verificationForm = document.getElementById('verificationForm');
+ 
+            if (registerForm.style.display == 'none') {  
+                registerForm.style.display = 'block';    
+                loginForm.style.display = 'none';  
+                formTitle.style.display = 'none'; // Скрываем заголовок "Вход" 
+                // formTitle.textContent = 'Регистрация';  
+                registerTitle.style.display = 'block'; // Показываем заголовок "Регистрация" 
+                submitButton.textContent = 'Зарегистрироваться';  
+                authButton.textContent = 'Назад к входу';  
+                registerPrompt.style.display = 'none'; // Скрыть строку о регистрации 
+                registerButton.style.display = 'none'; // Скрыть кнопку регистрации 
+                verificationForm.style.display = 'none'; // Скрыть форму ввода кода при смене на регистрацию
+            } 
+            else {  
+                registerForm.style.display = 'none';    
+                loginForm.style.display = 'block';
+                formTitle.style.display = 'block'; // Показываем заголовок "Вход"  
+                formTitle.textContent = 'Вход';  
+                registerTitle.style.display = 'none'; // Скрываем заголовок "Регистрация" 
+                submitButton.textContent = 'Войти';  
+                authButton.textContent = 'Регистрация';  
+                registerPrompt.style.display = 'block'; // Показать строку о регистрации  
+                registerPrompt.style.display = 'block'; // Показать строку о регистрации 
+                registerButton.style.display = 'block'; // Показать кнопку регистрации 
+                verificationForm.style.display = 'none'; // Скрыть форму для входа
+            }  
+        }    
+
+        // function showVerificationForm() { 
+        // const registerForm = document.getElementById('registerForm'); 
+        // const verificationForm = document.getElementById('verificationForm'); 
+        
+        // registerForm.style.display = 'none'; 
+        // verificationForm.style.display = 'block'; // Показываем форму ввода кода 
+        // }
+
+    </script>   
+  
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>    
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>    
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>    
+</body>    
+</html>

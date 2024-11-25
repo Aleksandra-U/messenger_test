@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Сообщения с пользователем ID {{ other_user_id }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #ffeef8; /* Светло-розовый фон */
+            color: #333;
+            margin: 0;
+            padding: 0;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .header {
+            background-color: #ff77a3; /* Основной цвет */
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+        }
+
+        .button {
+            background-color: #ff5e99; /* Цвет кнопок */
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            text-decoration: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .button:hover {
+            background-color: #ff2d6a; /* Более темный оттенок при наведении */
+        }
+
+        .container {
+            margin: 20px auto;
+            width: 700px;
+        }
+
+        h2 {
+            color: #ff5e99; /* Цвет заголовков */
+        }
+
+        .message-container {
+            width: 100%;
+            height: 200px; /* Уменьшили высоту вдвое */
+            overflow-y: auto;
+            border: 1px solid #ff77a3; /* Цвет рамки месседжей */
+            padding: 10px;
+            margin-bottom: 20px;
+            background-color: #ffffff; /* Цвет фона для блока с сообщениями */
+            border-radius: 5px;
+        }
+
+        .message {
+            justify-content: space-between;
+            align-items: center;
+            margin: 5px 0;
+        }
+
+        .message-info {
+            margin: 5px 0; /* Отступ для сообщения */
+        }
+
+        #messages {
+            max-height: 300px; /* Установите желаемую высоту */
+            overflow-y: auto;  /* Включает вертикальную прокрутку */
+        }
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <h1>Сообщения</h1>
+    </header>
+
+    <div style="text-align: right; margin: 20px;">
+        <a href="/main_page" class="button">На главную</a>
+    </div>
+
+    <div class="container">
+        <h2>Сообщения с пользователем {{ other_name }}</h2>
+        <div class="message-container" id="messages">
+            <ul id="messages_ul">
+                {% for message, name, timestamp in messages %}
+                    <li class="message">
+                        <span class="message-info">{{name}}: {{timestamp}} - {{message}}</span>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <form action="/send_message" onsubmit="sendMessage(event)" style="margin: 20px;">
+            <input type="hidden" name="recipient_id" value="{{ other_id }}">
+            <input type="text" id="messageText" name="message" placeholder="Введите сообщение" required
+                   style="padding: 10px; border-radius: 5px; border: 1px solid #ccc; width: calc(100% - 22px);">
+            <button type="submit" class="button" style='margin-top:10px;'>Отправить</button>
+        </form>
+    </div>
+
+
+    <script>
+        var client_id = {{ user_id }};
+        var other_id = {{ other_id }};
+        var ws = new WebSocket(`ws://localhost:8000/ws/${client_id}/${other_id}`);
+    
+        ws.onmessage = function(event) { 
+            var messages = document.getElementById('messages_ul'); 
+             
+            // Парсим входящее сообщение 
+            var data = JSON.parse(event.data); 
+            console.log(data);
+             
+            var message = document.createElement('li'); 
+            message.className = 'message'; 
+    
+            var span_message = document.createElement('span');
+            span_message.className = 'message-info';
+             
+            // Форматирование текста сообщения
+            var content = document.createTextNode(`${data.user}: ${data.timestamp} - ${data.message}`); 
+            span_message.appendChild(content);
+    
+            message.appendChild(span_message); 
+            messages.appendChild(message); 
+    
+            // Прокрутка вниз после добавления сообщения
+            var curr_div = document.getElementById('messages'); 
+            curr_div.scrollTop = curr_div.scrollHeight;
+        }; 
+    
+        function sendMessage(event) {
+            var input = document.getElementById("messageText");
+            ws.send(input.value);
+            input.value = '';
+            event.preventDefault();
+        }
+    
+        window.onload = function() {
+            var messagesContainer = document.getElementById('messages');
+            if (messagesContainer) {
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            }
+        };
+    </script>
+
+</body> 
+</html>

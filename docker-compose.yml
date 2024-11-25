@@ -1,0 +1,43 @@
+version: '3.8'
+services:
+  db:
+    image: postgres:15
+    container_name: db_messages
+    env_file: 
+      - .env-non-dev
+    ports:
+      - 5432:5432 #если хочу подключаться к базе локально с компа 
+
+
+  redis:
+    image: redis:7.4
+    container_name: cache
+    ports:
+      - "6379:6379"
+
+
+  messanger:
+    image: message_image
+    build:
+      context: .
+    container_name: messanger_app
+    env_file:
+      - .env-non-dev
+    depends_on:
+      - db
+      - redis
+    command: ['sh','/messanger/docker/app.sh']
+    # command: gunicorn -k uvicorn.workers.UvicornWorker app.main:app --bind 0.0.0.0:8000
+    ports:
+      - "7777:8000"
+
+
+  celery:
+    build:
+      context: .
+    container_name: messanger_celery
+    command: ['sh', '/messanger/docker/celery.sh', 'celery']
+    env_file:
+      - .env-non-dev
+    depends_on:
+      - redis

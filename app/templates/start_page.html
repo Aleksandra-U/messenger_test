@@ -1,0 +1,126 @@
+<!DOCTYPE html> 
+<html lang="ru"> 
+<head> 
+    <meta charset="UTF-8"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <title>Messanger</title> 
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #ffeef8; /* Светло-розовый фон */
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            margin: 20px auto;
+            width: 700px;
+        }
+
+        .header {
+            background-color: #ff77a3; /* Основной цвет */
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+        }
+
+        .button {
+            background-color: #ff5e99; /* Цвет кнопок */
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            text-decoration: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .button:hover {
+            background-color: #ff2d6a; /* Более темный оттенок при наведении */
+        }
+
+        h3 {
+            color: #ff5e99; /* Цвет заголовков */
+        }
+
+        table {
+            border-collapse: collapse;
+            margin-top: 10px;
+            width: 100%;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #ff77a3; /* Цвет заголовка таблицы */
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #ffeef8; /* Цвет четных строк */
+        }
+
+        tr:hover {
+            background-color: #ffb3d1; /* Цвет строки при наведении */
+        }
+
+        .user-list-container {
+            margin: 20px;
+            border: 1px solid #ff77a3;
+            border-radius: 5px;
+            padding: 10px;
+            background-color: #ffffff; /* Цвет фона для блока с пользователями */
+        }
+
+        .main-content {
+            flex-grow: 1;
+            padding: 20px; /* Отступы для основного контента */
+        }
+
+        a{
+            text-decoration: none;
+        }
+    </style>
+</head> 
+<body> 
+    <header class="header">     
+        <h1>Messanger</h1>  
+    </header>
+
+    <div style="display: flex; justify-content: flex-end; margin: 20px;"> 
+        <a href="/all_users" class="button" style="margin-right: 10px;">Все пользователи</a> 
+        <form action="/logout" method="post" style="margin: 0;"> 
+            <button type="submit" class="button">Выход</button> 
+        </form> 
+    </div>
+    <div class="container">
+        <div class="user-list-container"> 
+            <h3>Пользователи с перепиской</h3> 
+            <table border="1"> 
+                <thead> 
+                    <tr> 
+                        <th>Имена пользователей</th> 
+                    </tr> 
+                </thead> 
+                <tbody>  
+                    {% for user in conversation_users %}  
+                    <tr>  
+                        <td><a href="/messages/{{ user.id }}">{{ user.user_name }}</a></td> 
+                    </tr>  
+                    {% else %}  
+                    <tr>  
+                        <td>Нет переписки</td>  
+                    </tr>  
+                    {% endfor %}  
+                </tbody> 
+            </table> 
+        </div> 
+         
+</div>
+
+</body> 
+</html> 

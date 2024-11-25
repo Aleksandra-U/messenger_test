@@ -1,0 +1,97 @@
+<!DOCTYPE html>  
+<html lang="ru">  
+<head>  
+    <meta charset="UTF-8">  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+    <title>Все Пользователи</title>  
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #ffeef8; /* Светло-розовый фон */
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        .header {
+            background-color: #ff77a3; /* Основной цвет */
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+        }
+
+        .button {
+            background-color: #ff5e99; /* Цвет кнопок */
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            text-decoration: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin: 0 5px; /* Отступы между кнопками */
+        }
+
+        .button:hover {
+            background-color: #ff2d6a; /* Более темный оттенок при наведении */
+        }
+
+        h1 {
+            color: white; /* Цвет заголовков */
+            text-align: center; /* Центрирование заголовка */
+        }
+
+        table {
+            border-collapse: collapse;
+            margin: 20px auto; /* Центрирование таблицы */
+            width: 80%; /* Ширина таблицы */
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #ff77a3; /* Цвет заголовка таблицы */
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #ffeef8; /* Цвет четных строк */
+        }
+
+        tr:hover {
+            background-color: #ffb3d1; /* Цвет строки при наведении */
+        }
+    </style>
+</head>  
+<body>  
+    <header class="header">     
+        <h1>Все Пользователи</h1>  
+    </header>
+    
+    <div style="text-align: right; margin: 20px;"> 
+        <a href="/main_page" class="button">На главную</a> 
+    </div>
+    
+    <table border="1"> 
+        <thead> 
+            <tr> 
+                <th>ID</th> 
+                <th>Имя пользователя</th> 
+            </tr> 
+        </thead> 
+        <tbody> 
+            {% for user in users %} 
+            <tr> 
+                <td>{{ user.id }}</td> 
+                <td>
+                    <a href="/messages/{{ user.id }}">{{ user.user_name }}</a>
+                </td> 
+            </tr> 
+            {% endfor %} 
+        </tbody> 
+    </table> 
+</body>  
+</html>
